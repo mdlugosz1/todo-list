@@ -1,0 +1,23 @@
+{
+  "name": "todo-list",
+  "description": "Todo app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdlugosz1/todo-list.git"
+  },
+  "author": "Michał Długosz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mdlugosz1/todo-list/issues"
+  },
+  "homepage": "https://github.com/mdlugosz1/todo-list#readme",
+  "devDependencies": {
+    "webpack": "^5.26.3",
+    "webpack-cli": "^4.5.0"
+  }
+}
