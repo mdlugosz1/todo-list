@@ -1,0 +1,37 @@
+:root {
+    --main-color: #EE5244;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.top-bar {
+    background-color: var(--main-color);
+}
+
+.top-bar .fas {
+    float: right;
+    font-size: 2rem;
+    margin-top: 0.5em;
+    margin-right: 2em;
+    color: white;
+}
+
+img {
+    height: 65px;
+    width: 75px;
+}
+
+#menu {
+    background-color: lightgrey;
+    width: 20%;
+    height: 76em;
+    overflow: hidden;
+    display: flex;
+}
+
+ul {
+    font-size: 1.25rem;
+    margin: 0 auto;
+}
