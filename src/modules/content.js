@@ -1,44 +1,46 @@
 export { showList };
+import { toDoList } from './tasks';
 
 class DisplayTask {
-    constructor(container, header, id) {
-        this.container = container;
+    constructor(header, id, desc, date, priority) {
         this.header = header;
         this.id = id;
+        this.desc = desc;
+        this.date = date;
+        this.priority = priority;
     }
 
     createContainer() {
         const container = document.createElement('div');
-        container.className = this.container;
+        container.className = 'task-container';
         return container;
     }
 
     createHeader() {
-        const headerConatiner = document.createElement('div');
+        const headerContainer = document.createElement('div');
         const header = document.createElement('h3');
         const edit = document.createElement('button');
         const remove = document.createElement('button');
 
-        headerConatiner.className = 'tasks';
+        headerContainer.className = 'tasks';
+        headerContainer.dataset.taskId = this.id;
         header.textContent = this.header;
         edit.textContent = 'edit';
+        edit.className = 'edit-button'
+        edit.dataset.takId = this.id;
         remove.textContent = 'remove';
+        remove.className = 'remove-button';
+        remove.dataset.taskId = this.id;
 
-        headerConatiner.appendChild(header);
-        headerConatiner.appendChild(edit);
-        headerConatiner.appendChild(remove);
+        headerContainer.appendChild(header);
+        headerContainer.appendChild(edit);
+        headerContainer.appendChild(remove);
 
-        headerConatiner.value = this.id;
-        return headerConatiner;
+        return headerContainer;
     }
 
-    createDetails(desc) {
-        const details = document.createElement('div');
-        details.textContent = desc;
-        details.value = this.id;
-        details.className = 'details';
-        details.classList.add('hidden');
-        return details;
+    createDetails() {
+        
     }
 }
 
@@ -47,13 +49,17 @@ const showList = (list) => {
     content.innerHTML = '';
     
     for (let i = 0; i < list.length; i++) {
-        const newTask = new DisplayTask('task-container', list[i].title, list[i].id);
-        const fuckingContainer = newTask.createContainer();
-        fuckingContainer.appendChild(newTask.createHeader());
-        fuckingContainer.appendChild(newTask.createDetails(list[i].description));
-        content.appendChild(fuckingContainer);
+        const newTask = new DisplayTask(list[i].title, list[i].id, list[i].description, list[i].date, list[i].priority);
+        const container = newTask.createContainer();
+        container.appendChild(newTask.createHeader());
+        container.appendChild(newTask.createDetails());
+        content.appendChild(container);
     }
 
+    const remove = document.querySelectorAll('.remove');
+    remove.forEach(button => {
+        button.addEventListener('click', toDoList.removeTask);
+    });
     showDetails();
 };
 
@@ -62,11 +68,11 @@ const showDetails = () => {
 
     tasks.forEach(task => {
         task.addEventListener('click', event => {
-            const myClick = event.target.value;
+            const myClick = event.target.dataset.taskId;
             const details = document.querySelectorAll('.details');
             
             for (let detail of details) {
-                if (myClick === detail.value) {
+                if (myClick === detail.dataset.taskId) {
                     detail.classList.toggle('show');
                 }
             }
