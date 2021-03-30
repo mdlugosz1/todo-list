@@ -21,10 +21,11 @@ class Task extends Project {
 }
 
 const toDoList = (() => {    
-    const taskList = [new Task('Jebac pis', 'Bo ich kurwa na maxa nienawidze', '2021-11-11', 'High')];
+    const taskList = [new Task('Test task', 'test test test test test test', '2021-11-11', 'High')];
     
     const addTask = () => {
         const task = new Task(getFormData().title, getFormData().description, getFormData().date, getFormData().priority);
+        //document.querySelector('form').remove();
         taskList.push(task);
         showList(taskList);
     };
@@ -41,7 +42,7 @@ const toDoList = (() => {
         showList(taskList);
     };
 
-    
+    showList(taskList);
     return {
         addTask,
         removeTask,
