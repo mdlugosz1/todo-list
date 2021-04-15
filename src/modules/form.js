@@ -1,89 +1,209 @@
-export {createForm, getFormData};
+/* HOW TO USE 
 
-class FormElement {
-    constructor(name, input, type, options) {
-        this.name = name;
-        this.input = input;
-        this.type = type;
-        this.options = options;
+Form class was created to be used in any project. If you want to create new form and append it to existing element 
+just create new instance of Form with argument equal to HTML element i.e.:
+
+    const form = new Form(document.body);
+
+Next, you can add as much form specified tags and attributes as you want. Every set of tags, names etc. must be added by
+using built in method called addInput and must be passed as array of strings:
+
+    form.addInput(['input', 'text', 'description-for-input']);
+
+Example above will create form with input type set to text and name and id set do description-for-input. If you want add more sets of inputs,
+just pass more arrays separated by comma.
+
+For tags that need subtags, for exampe <select>, inputs must be added as follows:
+
+    form.addInput(['select', 'some-name', ['option1', 'option2', 'option3']]);
+
+After all tags set, we need to render our Form object which automatically will apend our form to selected element in our newly
+created object:
+
+    form.reneder();
+
+
+*/
+
+class Form {
+    constructor(element) {
+        this.element = element;
+        this.tagList = [];
+        this.form = document.createElement('form');
+        this.blocks;
     }
 
-    createLabel() {
-        const label = document.createElement('label');
-        label.setAttribute('for', this.name);
-        label.textContent = this.name;
-        return label;
-    }
+    static createTagObjects(property, list, tagList, typeList) {
+        let formObject = {};
+        let newProperty = property;
 
-    createInput() {
-        const attributes = ['type', 'id', 'name'];
-        const input = document.createElement(this.input);
-        
-        for (let i = 0; i < attributes.length; i++) {
-            if (i === 0) {
-                input.setAttribute(attributes[i], this.type);
+        tagList.forEach((tag) => {
+            for (let i = 0; i < newProperty.length; i++) {
+                if (tag === newProperty[i]) {
+                    Object.assign(formObject, {
+                        tag: newProperty[i],
+                    });
+                    newProperty.splice(i, 1);
+                }
+            }
+        });
+
+        typeList.forEach((type) => {
+            for (let i = 0; i < newProperty.length; i++) {
+                if (type === newProperty[i]) {
+                    Object.assign(formObject, {
+                        type: newProperty[i],
+                    });
+                    newProperty.splice(i, 1);
+                }
+            }
+        });
+
+        for (let i = 0; i < newProperty.length; i++) {
+            if (Array.isArray(newProperty[i])) {
+                Object.assign(formObject, { subtags: [newProperty[i]] });
             } else {
-                input.setAttribute(attributes[i], this.name);
+                Object.assign(formObject, { name: newProperty[i] });
             }
         }
 
-        if (this.input === 'select') {
-            input.removeAttribute('type');
+        list.push(formObject);
+    }
 
-            for (let i = 0; i < this.options.length; i++) {
-                const option = document.createElement('option');
-                option.setAttribute('value', this.options[i]);
-                option.textContent = this.options[i];
-                input.appendChild(option);
+    static createBlock(tagList) {
+        const div = document.createElement('div');
+        const label = document.createElement('label');
+        const input = document.createElement(tagList.tag);
+        const br = document.createElement('br');
+
+        if (input.tagName === 'SELECT') {
+            for (let key of tagList.subtags) {
+                for (let i = 0; i < key.length; i++) {
+                    const option = document.createElement('option');
+                    option.textContent = key[i];
+                    option.value = key[i];
+                    input.appendChild(option);
+                }
             }
         }
 
-        return input;
+        div.appendChild(label);
+        div.appendChild(br);
+        div.appendChild(input);
+
+        return div;
+    }
+
+    setLabels() {
+        const labels = this.form.querySelectorAll('label');
+
+        for (let i = 0; i < labels.length; i++) {
+            labels[i].setAttribute('for', this.tagList[i].name);
+            labels[i].textContent = this.tagList[i].name;
+        }
+    }
+
+    setInputAttributes() {
+        this.blocks = this.form.querySelectorAll('div');
+
+        for (let i = 0; i < this.blocks.length; i++) {
+            let input = this.blocks[i].lastChild;
+
+            if (input.tagName === 'INPUT') {
+                input.setAttribute('type', this.tagList[i].type);
+            }
+
+            input.setAttribute('id', this.tagList[i].name);
+            input.setAttribute('name', this.tagList[i].name);
+        }
+    }
+
+    addInput(...properties) {
+        const possibleTypes = [
+            'button',
+            'checkbox',
+            'color',
+            'date',
+            'datetime-local',
+            'email',
+            'file',
+            'hidden',
+            'image',
+            'month',
+            'number',
+            'password',
+            'radio',
+            'range',
+            'reset',
+            'search',
+            'submit',
+            'tel',
+            'text',
+            'time',
+            'url',
+            'week',
+        ];
+        const possibleTags = [
+            'input',
+            'textarea',
+            'button',
+            'select',
+            'option',
+            'optgroup',
+            'fieldset',
+            'output',
+        ];
+
+        for (let property of properties) {
+            if (Array.isArray(property)) {
+                Form.createTagObjects(
+                    property,
+                    this.tagList,
+                    possibleTags,
+                    possibleTypes
+                );
+            } else {
+                console.error(`${property} is not an array.`);
+            }
+        }
+    }
+
+    addButton(text) {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.addEventListener('click', () => {
+            this.remove();
+            this.getValues();
+        });
+        this.form.appendChild(button);
+    }
+
+    reneder() {
+        for (let tag of this.tagList) {
+            this.form.appendChild(Form.createBlock(tag));
+        }
+
+        this.setLabels();
+        this.setInputAttributes();
+        this.element.appendChild(this.form);
+    }
+
+    remove() {
+        this.form.remove();
+        this.tagList = [];
+    }
+
+    getValues() {
+        const values = {};
+
+        for (let i = 0; i < this.blocks.length; i++) {
+            let input = this.blocks[i].lastChild;
+            let name = input.getAttribute('name');
+            let inputValues = input.value;
+
+            Object.assign(values, { [name]: inputValues });
+        }
+
+        return values;
     }
 }
-
-const createForm = () => {
-    const form = document.createElement('form');
-    const submit = document.createElement('button');
-    const formProperties = [['Title', 'input', 'text'], ['Date', 'input', 'date'], ['Priority', 'select', '', ['High', 'Normal', 'Low']], ['Description', 'textarea']];
-    const elements = [];
-
-    form.className = 'submit-form';
-    submit.textContent = 'Add Task';
-    submit.setAttribute('type', 'button');
-
-    //Loop that creates form elements with properties given in formProperties variable
-    formProperties.forEach(element => {
-        let newElement = new FormElement();
-        let keys = Object.keys(newElement);
-
-        for (let i = 0; i < element.length; i++) {
-           newElement[keys[i]] = element[i];
-        }
-
-        elements.push(newElement);
-    });
-
-    for (let i = 0; i < elements.length; i++) {
-        form.appendChild(elements[i].createLabel());
-        form.appendChild(elements[i].createInput());
-    }
-
-    form.appendChild(submit);
-
-    return form;
-};
-
-const getFormData = () => {
-    const title = document.querySelector('#Title').value;
-    const date = document.querySelector('#Date').value;
-    const priority = document.querySelector('#Priority').value;
-    const description = document.querySelector('#Description').value;
-
-    return {
-        title,
-        date,
-        priority,
-        description
-    }
-};
