@@ -15,13 +15,23 @@ export default class Menu {
                     uls[i].classList.remove('active');
                 }
 
-                categories.className = 'active';
+                categories.classList.add('active');
             }
         });
     }
 
+    static clearMenu(projects) {
+        const list = projects.querySelectorAll('ul');
+
+        for (let i = list.length - 1; i >= 0; i--) {
+            list[i].textContent = '';
+        }
+    }
+
     renederProjectList(list) {
         const projectsList = this.menu.querySelector('#projects');
+
+        Menu.clearMenu(projectsList);
 
         for (let item of list) {
             const project = document.createElement('ul');
@@ -30,5 +40,11 @@ export default class Menu {
         }
 
         Menu.setActive(this.menu);
+    }
+
+    getActiveElement(elements) {
+        if (elements.classList.contains('active')) {
+            return elements.id;
+        }
     }
 }
