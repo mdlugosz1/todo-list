@@ -107,7 +107,10 @@ export default class Form {
         const labels = this.form.querySelectorAll('label');
 
         for (let i = 0; i < labels.length; i++) {
-            labels[i].setAttribute('for', this.tagList[i].name);
+            labels[i].setAttribute(
+                'for',
+                this.tagList[i].name.replace(/\s+/g, '-').toLowerCase()
+            );
             labels[i].textContent = this.tagList[i].name;
         }
     }
@@ -122,8 +125,14 @@ export default class Form {
                 input.setAttribute('type', this.tagList[i].type);
             }
 
-            input.setAttribute('id', this.tagList[i].name);
-            input.setAttribute('name', this.tagList[i].name);
+            input.setAttribute(
+                'id',
+                this.tagList[i].name.replace(/\s+/g, '-').toLowerCase()
+            );
+            input.setAttribute(
+                'name',
+                this.tagList[i].name.replace(/\s+/g, '-').toLowerCase()
+            );
         }
     }
 
