@@ -25,7 +25,7 @@ created object:
 
 */
 
-class Form {
+export default class Form {
     constructor(element) {
         this.element = element;
         this.tagList = [];
@@ -92,6 +92,15 @@ class Form {
         div.appendChild(input);
 
         return div;
+    }
+
+    static addButton() {
+        const button = document.createElement('button');
+        button.textContent = 'Submit';
+        button.className = 'submit';
+        button.setAttribute('type', 'button');
+
+        return button;
     }
 
     setLabels() {
@@ -168,16 +177,6 @@ class Form {
         }
     }
 
-    addButton(text) {
-        const button = document.createElement('button');
-        button.textContent = text;
-        button.addEventListener('click', () => {
-            this.remove();
-            this.getValues();
-        });
-        this.form.appendChild(button);
-    }
-
     reneder() {
         for (let tag of this.tagList) {
             this.form.appendChild(Form.createBlock(tag));
@@ -185,12 +184,22 @@ class Form {
 
         this.setLabels();
         this.setInputAttributes();
+        this.form.appendChild(Form.addButton());
         this.element.appendChild(this.form);
     }
 
     remove() {
         this.form.remove();
         this.tagList = [];
+    }
+
+    validation() {
+        for (let block of this.blocks) {
+            if (block.lastChild.value === '') {
+                alert('Please fill out empty fields');
+                return;
+            }
+        }
     }
 
     getValues() {
