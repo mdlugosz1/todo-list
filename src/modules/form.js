@@ -87,9 +87,7 @@ export default class Form {
             }
         }
 
-        div.appendChild(label);
-        div.appendChild(br);
-        div.appendChild(input);
+        div.append(label, br, input);
 
         return div;
     }
@@ -204,7 +202,7 @@ export default class Form {
 
     validation() {
         for (let block of this.blocks) {
-            if (block.lastChild.value === '') {
+            if (block.lastChild.value === null) {
                 alert('Please fill out empty fields');
                 return;
             }

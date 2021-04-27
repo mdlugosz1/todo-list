@@ -30,10 +30,7 @@ export default class DisplayContent {
 
         checkbox.setAttribute('type', 'checkbox');
 
-        headerContainer.appendChild(checkbox);
-        headerContainer.appendChild(header);
-        headerContainer.appendChild(edit);
-        headerContainer.appendChild(removeButton);
+        headerContainer.append(checkbox, header, edit, removeButton);
 
         return headerContainer;
     }
@@ -51,8 +48,7 @@ export default class DisplayContent {
             header.textContent = detailsHeaders[i];
             info.textContent = details[i];
 
-            detailsDiv.appendChild(header);
-            detailsDiv.appendChild(info);
+            detailsDiv.append(header, info);
         }
 
         detailsDiv.className = 'details';
@@ -92,8 +88,10 @@ export default class DisplayContent {
 
         for (let task of this.taskList) {
             const content = DisplayContent.createContainer();
-            content.appendChild(DisplayContent.createHeader(task));
-            content.appendChild(DisplayContent.createDetails(task));
+            content.append(
+                DisplayContent.createHeader(task),
+                DisplayContent.createDetails(task)
+            );
             this.content.appendChild(content);
         }
 
