@@ -30,6 +30,7 @@ export default class Form {
         this.element = element;
         this.tagList = [];
         this.form = document.createElement('form');
+        this.button = document.createElement('button');
         this.blocks;
     }
 
@@ -92,8 +93,7 @@ export default class Form {
         return div;
     }
 
-    static addButton() {
-        const button = document.createElement('button');
+    static addButton(button) {
         button.textContent = 'Submit';
         button.className = 'submit';
         button.setAttribute('type', 'button');
@@ -191,7 +191,7 @@ export default class Form {
 
         this.setLabels();
         this.setInputAttributes();
-        this.form.appendChild(Form.addButton());
+        this.form.appendChild(Form.addButton(this.button));
         this.element.appendChild(this.form);
     }
 
@@ -202,9 +202,9 @@ export default class Form {
 
     validation() {
         for (let block of this.blocks) {
-            if (block.lastChild.value === null) {
+            if (block.lastChild.value === '') {
                 alert('Please fill out empty fields');
-                return;
+                return false;
             }
         }
     }
@@ -221,5 +221,9 @@ export default class Form {
         }
 
         return values;
+    }
+
+    submitEvent(callback) {
+        this.button.addEventListener('click', callback);
     }
 }
