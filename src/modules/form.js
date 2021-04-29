@@ -88,6 +88,7 @@ export default class Form {
             }
         }
 
+        div.className = tagList.name.toLowerCase();
         div.append(label, br, input);
 
         return div;
@@ -99,6 +100,17 @@ export default class Form {
         button.setAttribute('type', 'button');
 
         return button;
+    }
+
+    addCloseButton() {
+        const button = document.createElement('button');
+        button.innerHTML = '&times;';
+        button.setAttribute('type', 'button');
+        button.className = 'close';
+        button.addEventListener('click', () => {
+            this.remove();
+        });
+        this.form.appendChild(button);
     }
 
     setLabels() {
