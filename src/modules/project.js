@@ -15,6 +15,16 @@ export default class Project {
         return this.name;
     }
 
+    findTask(taskID) {
+        const task = this.tasks.find(({ id }, index) => {
+            if (taskID === id) {
+                return this.tasks[index];
+            }
+        });
+
+        return task;
+    }
+
     getTasks() {
         return this.tasks;
     }
