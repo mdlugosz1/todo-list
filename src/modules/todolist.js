@@ -7,8 +7,20 @@ export default class ToDoList {
         return this.projects;
     }
 
-    addProject(project) {
-        this.projects.push(project);
+    getSpecifiedProject(projectID) {
+        const project = this.getProjects().find(({ id }) => {
+            if (id === projectID) {
+                return projectID;
+            }
+        });
+
+        return project;
+    }
+
+    addProject(...projects) {
+        for (let project of projects) {
+            this.projects.push(project);
+        }
     }
 
     removeProject(projectID) {
@@ -25,5 +37,10 @@ export default class ToDoList {
                 this.projects[index].name = newName;
             }
         });
+    }
+
+    getProjectNames() {
+        const names = this.projects.map((project) => project.name);
+        return names;
     }
 }
