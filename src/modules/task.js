@@ -9,7 +9,6 @@ export default class Task {
 
     toogleStatus() {
         this.isDone = !this.isDone;
-        console.log(this.isDone);
     }
 
     getDetails() {
@@ -17,6 +16,12 @@ export default class Task {
     }
 
     editTask(data) {
-        this.details = data;
+        for (let key in data) {
+            for (let detail in this.details) {
+                if (detail === key) {
+                    this.details[key] = data[key];
+                }
+            }
+        }
     }
 }
