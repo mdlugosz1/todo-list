@@ -1,4 +1,6 @@
-/* HOW TO USE 
+/* Created by Michał Długosz.
+
+HOW TO USE 
 
 Form class was created to be used in any project. If you want to create new form and append it to existing element 
 just create new instance of Form with argument equal to HTML element i.e.:
@@ -100,6 +102,10 @@ export default class Form {
         button.setAttribute('type', 'button');
 
         return button;
+    }
+
+    getSubmitButton() {
+        return this.button;
     }
 
     addCloseButton() {
@@ -235,7 +241,17 @@ export default class Form {
         return values;
     }
 
-    submitEvent(callback) {
-        this.button.addEventListener('click', callback);
+    setValues(object) {
+        this.blocks.forEach((block) => {
+            for (let keys in object) {
+                if (block.className === keys) {
+                    block.lastChild.value = object[keys];
+                }
+            }
+        });
     }
+
+    /* submitEvent(callback) {
+        this.button.addEventListener('click', callback);
+    } */
 }
