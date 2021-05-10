@@ -1,6 +1,40 @@
+import { parseISO, differenceInCalendarDays } from 'date-fns/esm//fp';
+
 export default class ToDoList {
     constructor() {
         this.projects = [];
+    }
+
+    getAllTasks() {
+        const allTasks = this.projects.map((project) => project.tasks).flat();
+        return allTasks;
+    }
+
+    todayTasks() {
+        const todayTasks = this.getAllTasks().filter((task) => {
+            const today = new Date();
+            const taskDate = parseISO(task.details.date);
+
+            if (differenceInCalendarDays(today)(taskDate) === 0) {
+                return task;
+            }
+        });
+
+        return todayTasks;
+    }
+
+    nextWeekTasks() {
+        const nextWeek = this.getAllTasks().filter((task) => {
+            const today = new Date();
+            const taskDate = parseISO(task.details.date);
+            const difference = differenceInCalendarDays(today)(taskDate);
+
+            if (difference <= 7 && difference >= 1) {
+                return task;
+            }
+        });
+
+        return nextWeek;
     }
 
     getProjects() {
