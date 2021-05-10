@@ -90,7 +90,7 @@ export default class Form {
             }
         }
 
-        div.className = tagList.name.toLowerCase();
+        div.className = tagList.name.replace(/\s+/g, '-').toLowerCase();
         div.append(label, br, input);
 
         return div;
@@ -110,11 +110,13 @@ export default class Form {
 
     addCloseButton() {
         const button = document.createElement('button');
+        const container = document.querySelector('.form-container');
         button.innerHTML = '&times;';
         button.setAttribute('type', 'button');
         button.className = 'close';
         button.addEventListener('click', () => {
             this.remove();
+            container.classList.remove('show');
         });
         this.form.appendChild(button);
     }
@@ -250,8 +252,4 @@ export default class Form {
             }
         });
     }
-
-    /* submitEvent(callback) {
-        this.button.addEventListener('click', callback);
-    } */
 }
