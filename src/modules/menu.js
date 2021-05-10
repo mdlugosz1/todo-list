@@ -7,7 +7,7 @@ export default class Menu {
     static clearMenu(projects) {
         const list = projects.querySelectorAll('ul');
 
-        for (let i = list.length - 1; i >= 0; i--) {
+        for (let i = 0; i < list.length; i++) {
             list[i].textContent = '';
         }
     }
@@ -27,37 +27,46 @@ export default class Menu {
     }
 
     renederProjectList(list) {
-        const projectsList = this.menu.querySelector('#projects');
+        const projectsList = this.menu.querySelector('.new-projects');
 
         Menu.clearMenu(projectsList);
 
         for (let item of list) {
-            if (item.name === 'Inbox') {
-                continue;
+            if (item.name !== 'Inbox') {
+                const circle = document.createElement('i');
+                circle.className = 'fas fa-circle';
+
+                const project = document.createElement('ul');
+                project.textContent = item.name;
+                project.setAttribute('data-project-id', item.id);
+
+                const removeButton = document.createElement('i');
+                removeButton.className = 'far fa-trash-alt';
+                removeButton.setAttribute('data-project-id', item.id);
+
+                project.prepend(circle);
+                project.appendChild(removeButton);
+                projectsList.appendChild(project);
             }
-
-            const project = document.createElement('ul');
-            project.textContent = item.name;
-            project.setAttribute('data-project-id', item.id);
-
-            const removeButton = document.createElement('i');
-            removeButton.className = 'far fa-trash-alt';
-            removeButton.setAttribute('data-project-id', item.id);
-
-            project.appendChild(removeButton);
-            projectsList.appendChild(project);
         }
     }
 
     addProject(project) {
-        const projectsList = this.menu.querySelector('#projects');
+        const projectsList = this.menu.querySelector('.new-projects');
         const newProject = document.createElement('ul');
+        const removeButton = document.createElement('i');
+        const circle = document.createElement('i');
+
+        circle.className = 'fas fa-circle';
+
         newProject.textContent = project.name;
         newProject.setAttribute('data-project-id', project.id);
-        const removeButton = document.createElement('i');
+
         removeButton.className = 'far fa-trash-alt';
         removeButton.setAttribute('data-project-id', project.id);
-        newProject.appendChild(removeButton);
+
+        newProject.append(circle, removeButton);
+
         projectsList.appendChild(newProject);
     }
 
@@ -76,7 +85,4 @@ export default class Menu {
     getMenu() {
         return this.menu;
     }
-    /* onClick(callback) {
-        this.menu.addEventListener('click', callback);
-    } */
 }
