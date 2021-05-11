@@ -84,6 +84,7 @@ export default class InitializeApp {
     static setupProjectForm(toDo, menu) {
         const container = document.querySelector('.form-container');
         const projectForm = new Form(container);
+        projectForm.getForm().className = 'form-project';
         projectForm.addInput(['Project Name', 'input', 'text']);
         projectForm.addCloseButton();
         projectForm.reneder();
@@ -188,13 +189,9 @@ export default class InitializeApp {
                 project = InitializeApp.setTodayOrWeekProject(todo, dataset);
             }
 
-            if (element) {
-                content.showDetails(element);
-            } else {
+            if (!element) {
                 return;
-            }
-
-            if (event.target.matches('input')) {
+            } else if (event.target.matches('input')) {
                 content.changeStatus(event.target.closest('.task-container'));
                 project.findTask(dataset).toogleStatus();
             } else if (event.target.matches('.remove')) {
@@ -207,6 +204,8 @@ export default class InitializeApp {
 
                 form.setValues(taskDetails);
                 InitializeApp.formSetupEditTask(form, task, content, todo);
+            } else {
+                content.showDetails(element);
             }
 
             localStorage.setItem('list', JSON.stringify(todo));
