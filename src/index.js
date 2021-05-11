@@ -6,11 +6,7 @@ import ConvertFromStorage from './modules/storagedata';
 
 const startApp = new InitializeApp();
 
-if (localStorage.length > 0) {
-    const userList = JSON.parse(localStorage.getItem('list'));
-    const userToDo = ConvertFromStorage.convertToDo(userList);
-    startApp.setToDo(userToDo);
-} else {
+if (localStorage.getItem('list') == null) {
     const defaultToDo = new ToDoList();
     const testProject = new Project('Default Project');
     const task1 = new Task({
@@ -45,4 +41,8 @@ if (localStorage.length > 0) {
     testProject.addTask(task3);
     defaultToDo.addProject(testProject);
     startApp.setToDo(defaultToDo);
+} else {
+    const userList = JSON.parse(localStorage.getItem('list'));
+    const userToDo = ConvertFromStorage.convertToDo(userList);
+    startApp.setToDo(userToDo);
 }
