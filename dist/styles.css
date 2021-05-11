@@ -239,6 +239,9 @@ ul .far {
 .tasks input::before {
     content: '\1';
     display: block;
+    height: 1.5em;
+    width: 1.5em;
+    color: transparent;
     text-align: center;
 }
 
@@ -277,18 +280,19 @@ ul .far {
 form {
     border: 1px solid rgb(199, 194, 194);
     position: absolute;
-    padding: 3em;
     background-color: rgb(255, 255, 255);
     display: grid;
+    padding: 3em;
+    grid-gap: 1em;
     align-self: center;
     justify-self: center;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 5% 10% 10% 70% 5%;
+    grid-template-rows: 5% 10% 10% 40% 75px;
     border-radius: 5px;
 }
 
 form div {
-    margin: 1em 0;
+    margin-top: 10px;
 }
 
 form div label {
@@ -297,11 +301,11 @@ form div label {
 
 form select,
 form input {
-    margin-top: 0.5em;
+    margin-top: --moz 0.5em;
 }
 
 form input {
-    height: 0.25em;
+    height: --moz 0.25em;
 }
 
 form select {
@@ -317,8 +321,8 @@ form .close {
     font-size: 2.5rem;
     color: var(--main-color);
     position: absolute;
-    right: -1em;
-    top: -1.25em;
+    right: -1.4em;
+    top: -1.2em;
 }
 
 form .close:hover {
@@ -357,6 +361,7 @@ form .description textarea {
     width: 100%;
     height: 10em;
     margin-top: 1em;
+    margin-bottom: 0.2em;
 }
 
 form .submit {
@@ -364,8 +369,10 @@ form .submit {
     grid-row: 5/6;
     appearance: none;
     width: 7em;
-    margin: 0.5em auto;
-    padding: 1em;
+    height: 3em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 20px auto;
     font-size: 1rem;
     background-color: var(--main-color);
     border-radius: 5px;
@@ -383,4 +390,23 @@ form .project-name {
     grid-column: 1/3;
     width: 100%;
     align-self: center;
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+.form-project {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-project .close {
+    display: inline-block;
+    right: 0;
+    top: 0;
+}
+
+.form-project .submit {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 2.5em;
 }
