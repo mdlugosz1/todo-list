@@ -243,6 +243,10 @@ export default class Form {
         return values;
     }
 
+    getForm() {
+        return this.form;
+    }
+
     setValues(object) {
         this.blocks.forEach((block) => {
             for (let keys in object) {
